@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Emil & Sarah - Wedding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Pinyon+Script&family=Cormorant+Garamond:wght@500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --sage-dark: #4a5d4e;
+            --sage-main: #7c9082;
+            --sage-light: #b3c2b8;
+            --sage-bg: #eef2ef;
+            --text-main: #333333;
+            --paper: #fcfbf9;
+            --page-bg-image: url('./5.jpg');
+            --card-bg-image: url('./4.jpg');
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--sage-bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            width: 100%;
+            min-height: 100%;
+            min-height: -webkit-fill-available;
+        }
+
+        /* 1. THE PERMANENT GLOBAL FRAME/BORDER */
+        .global-frame {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 1px solid var(--sage-main);
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .global-frame::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 1px solid rgba(124, 144, 130, 0.3);
+        }
+
+        /* 2. THE DISTINCT ELEGANT BACKGROUND */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            z-index: 0;
+            background-image:
+                radial-gradient(circle at 80% 20%, rgba(179, 194, 184, 0.35) 0%, transparent 50%),
+                radial-gradient(circle at 10% 90%, rgba(179, 194, 184, 0.35) 0%, transparent 50%),
+                var(--page-bg-image);
+            background-size: auto, auto, cover;
+            background-position: 80% 20%, 10% 90%, center;
+            background-repeat: no-repeat;
+            background-color: var(--paper);
+            pointer-events: none;
+        }
+
+        /* 3. NEW ORIGINAL OPENING: THE WAX SEAL / FROSTED ENVELOPE */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0; /* Anchoring all sides fixes the in-app browser cutoff */
+            background-image: url('./1.jpg');
+            background-color: var(--paper);
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.2s ease, visibility 1.2s;
+            overflow: hidden;
+            perspective: 1200px;
+            isolation: isolate;
+        }
+
+        #intro-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(255, 241, 235, 0.45) 0%, transparent 55%),
+                linear-gradient(120deg, rgba(252, 236, 230, 0.48) 0%, rgba(233, 205, 196, 0.32) 50%, rgba(209, 175, 165, 0.2) 100%);
+            background-size: 200% 200%;
+            animation: sageBreeze 18s ease-in-out infinite;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #intro-overlay > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes sageBreeze {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* NEW LITERAL 3D DESIGN ANIMATIONS */
+        .flower-cluster {
+            position: absolute;
+            transform-style: preserve-3d;
+            animation: floatFlower 25s infinite linear;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .floral-petal {
+            position: absolute;
+            top: -60px; left: -60px;
+            width: 120px; height: 120px;
+            background: rgba(124, 144, 130, 0.15); /* sage-main transparency */
+            border: 1px solid rgba(124, 144, 130, 0.5);
+            border-radius: 50% 0 50% 0;
+            transform-origin: center;
+            box-shadow: inset 0 0 20px rgba(124, 144, 130, 0.1);
+        }
+
+        /* Create a blooming wireframe flower shape */
+        .floral-petal:nth-child(1) { transform: rotateX(45deg) rotateY(0deg); }
+        .floral-petal:nth-child(2) { transform: rotateX(45deg) rotateY(45deg); }
+        .floral-petal:nth-child(3) { transform: rotateX(45deg) rotateY(90deg); }
+        .floral-petal:nth-child(4) { transform: rotateX(45deg) rotateY(135deg); }
+        .floral-petal:nth-child(5) { transform: rotateZ(45deg) rotateX(45deg) rotateY(0deg); }
+        .floral-petal:nth-child(6) { transform: rotateZ(45deg) rotateX(45deg) rotateY(45deg); }
+        .floral-petal:nth-child(7) { transform: rotateZ(45deg) rotateX(45deg) rotateY(90deg); }
+        .floral-petal:nth-child(8) { transform: rotateZ(45deg) rotateX(45deg) rotateY(135deg); }
+
+        @keyframes floatFlower {
+            0% { transform: translate3d(0, 0, -300px) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            50% { transform: translate3d(80px, -80px, 150px) rotateX(180deg) rotateY(90deg) rotateZ(180deg); }
+            100% { transform: translate3d(-50px, 80px, -300px) rotateX(360deg) rotateY(180deg) rotateZ(360deg); }
+        }
+
+        /* Smaller tumbling distinct leaves to complement */
+
+        .leaf-3d {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C12 2 3 7 3 14C3 19 12 22 12 22C12 22 21 19 21 14C21 7 12 2 12 2Z" fill="%237c9082" opacity="0.6"/></svg>');
+            background-size: cover;
+            transform-style: preserve-3d;
+            animation: tumble 15s infinite linear alternate;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes tumble {
+            0% { transform: translate3d(0, 0, -300px) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            50% { transform: translate3d(50px, -50px, 150px) rotateX(180deg) rotateY(180deg) rotateZ(90deg); }
+            100% { transform: translate3d(-50px, -100px, -300px) rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
+        }
+
+        #intro-overlay::before,
+        #intro-overlay::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: 0;
+            animation: floatBlobs 15s ease-in-out infinite alternate;
+        }
+
+        #intro-overlay::before {
+            width: 50vw;
+            height: 50vw;
+            background: rgba(124, 144, 130, 0.3); /* sage-main glow */
+            top: -10%;
+            left: -10%;
+        }
+
+        #intro-overlay::after {
+            width: 60vw;
+            height: 60vw;
+            background: rgba(179, 194, 184, 0.35); /* sage-light glow */
+            bottom: -20%;
+            right: -10%;
+            animation-delay: -7.5s;
+        }
+
+        @keyframes floatBlobs {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.2) translate(10%, -10%); }
+        }
+
+        /* ELEGANT DECORATIVE ELEMENTS */
+        .sparkle {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: rgba(179, 194, 184, 0.9);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(124, 144, 130, 0.8);
+            animation: twinkle 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Animated decorative line */
+        .deco-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(124, 144, 130, 0.5), transparent);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .line-h {
+            width: 250px;
+            height: 1px;
+            animation: slideInH 6s ease-in-out infinite;
+        }
+
+        .line-v {
+            width: 1px;
+            height: 150px;
+            animation: slideInV 5s ease-in-out infinite;
+        }
+
+        @keyframes slideInH {
+            0%, 100% { opacity: 0; transform: translateX(-125px); }
+            50% { opacity: 0.7; transform: translateX(125px); }
+        }
+
+        @keyframes slideInV {
+            0%, 100% { opacity: 0; transform: translateY(-75px); }
+            50% { opacity: 0.7; transform: translateY(75px); }
+        }
+
+        /* Floating orbs */
+        .float-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.6), rgba(179, 194, 184, 0.2));
+            border: 1px solid rgba(124, 144, 130, 0.3);
+            box-shadow: inset -2px -2px 5px rgba(0,0,0,0.1), 0 0 20px rgba(124, 144, 130, 0.15);
+            animation: float 8s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-40px) translateX(20px); }
+        }
+
+        .intro-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            z-index: 1;
+        }
+
+        .intro-title {
+            font-family: 'Great Vibes', 'Pinyon Script', cursive;
+            font-size: 5.2rem;
+            font-weight: 400;
+            letter-spacing: 0.6px;
+            color: transparent;
+            background-image: linear-gradient(
+                110deg,
+                var(--sage-dark) 0%,
+                var(--sage-main) 30%,
+                #d4af37 50%,
+                var(--sage-main) 70%,
+                var(--sage-dark) 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            margin-bottom: 5px;
+            line-height: 1.3;
+            padding: 20px 10px;
+            text-shadow: 0 12px 26px rgba(74, 93, 78, 0.15), 0 2px 6px rgba(252, 251, 249, 0.3);
+            position: relative;
+            animation: titleReveal 1.2s ease-out both, textShimmer 4s linear infinite;
+        }
+
+        @keyframes textShimmer {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .intro-title::after {
+            content: '';
+            display: block;
+            width: 140px;
+            height: 2px;
+            margin: 14px auto 0;
+            background: linear-gradient(90deg, transparent, var(--sage-main), transparent);
+            opacity: 0.85;
+        }
+
+        @keyframes titleReveal {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .intro-seal {
+            width: 85px;
+            height: 85px;
+            background: linear-gradient(135deg, var(--sage-main) 0%, var(--sage-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(74, 93, 78, 0.3), inset 0 0 15px rgba(255,255,255,0.15);
+            border: 2px solid var(--sage-light);
+            margin-top: 40px;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .intro-seal::before {
+            content: '';
+            position: absolute;
+            top: -6px; left: -6px; right: -6px; bottom: -6px;
+            border: 1px dashed var(--sage-main);
+            border-radius: 50%;
+            animation: spin 20s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .intro-seal:hover {
+            transform: scale(1.08);
+            box-shadow: 0 15px 30px rgba(74, 93, 78, 0.4);
+        }
+
+        /* 4. VISIBLE TOP NAVIGATION MENU */
+        .top-nav {
+            position: sticky;
+            top: 30px;
+            margin: 0 auto;
+            width: 90%;
+            max-width: 600px;
+            background: rgba(252, 251, 249, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 18px 30px;
+            border-radius: 50px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(124, 144, 130, 0.2);
+            z-index: 100;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 1s ease 1s, transform 1s ease 1s;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--sage-dark);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding-bottom: 4px;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--sage-main);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* 5. MAIN CONTENT LAYOUT */
+        .main-container {
+            display: none; 
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px 100px 20px;
+            opacity: 0;
+            transition: opacity 1.2s ease;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-card {
+            background-color: rgba(252, 251, 249, 0.92); /* slightly transparent so the floral background shows through */
+            backdrop-filter: blur(4px);
+            max-width: 650px;
+            width: 100%;
+            margin: 20px 0;
+            padding: 70px 60px;
+            box-shadow: 0 15px 40px rgba(124, 144, 130, 0.12);
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.6s forwards;
+            border-radius: 12px;
+        }
+
+        .section-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--card-bg-image) center/cover no-repeat;
+            opacity: 0.80;
+            z-index: 0;
+        }
+
+        .section-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-card.active {
+            display: block;
+        }
+
+        /* Elegant inner frame for cards */
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 1px solid rgba(124, 144, 130, 0.15);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--sage-dark);
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .home-eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-size: 0.75rem;
+            color: var(--sage-main);
+        }
+
+        .home-names {
+            font-family: 'Great Vibes', 'Pinyon Script', cursive;
+            font-size: 3.8rem;
+            color: transparent;
+            margin: 18px 0 10px;
+            line-height: 1.2;
+            background-image: linear-gradient(
+                110deg,
+                var(--sage-dark) 0%,
+                var(--sage-main) 30%,
+                #d4af37 50%,
+                var(--sage-main) 70%,
+                var(--sage-dark) 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: textShimmer 4s linear infinite;
+        }
+
+        .home-invite {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+            color: var(--sage-dark);
+            line-height: 1.8;
+        }
+
+        .home-date {
+            margin: 35px 0 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+            color: #c98f8a;
+        }
+
+        .home-date .date-month {
+            text-align: center;
+            margin-bottom: 5px;
+            color: #c98f8a;
+        }
+
+        .home-date .date-row {
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .home-date .date-side {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid rgba(124, 144, 130, 0.6);
+            border-bottom: 1px solid rgba(124, 144, 130, 0.6);
+            padding: 8px 10px;
+            color: #c98f8a;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+        }
+
+        .home-date .date-center {
+            border: 1px solid rgba(124, 144, 130, 0.6);
+            padding: 8px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .home-date .date-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.6rem;
+            font-weight: 500;
+            color: #c98f8a;
+            line-height: 1;
+        }
+
+        .home-venue {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            color: var(--sage-dark);
+            line-height: 1.8;
+        }
+
+        .home-reception {
+            margin-top: 18px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+            color: #777;
+        }
+
+        .flower-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 20px auto;
+            opacity: 0.6;
+        }
+
+        .text-body {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+
+        button.action-btn {
+            background-color: transparent;
+            border: 1px solid var(--sage-main);
+            color: var(--sage-dark);
+            padding: 14px 40px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 25px;
+        }
+        button.action-btn:hover {
+            background-color: var(--sage-main);
+            color: white;
+        }
+
+        /* Forms */
+        .rsvp-form { display: flex; flex-direction: column; gap: 20px; text-align: left; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        input, select {
+            padding: 14px;
+            border: 1px solid #e0e0e0;
+            background: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+        }
+        input:focus, select:focus {
+            outline: none; border-color: var(--sage-main);
+        }
+        label { font-size: 0.75rem; letter-spacing: 1.5px; color: var(--sage-dark); font-weight: 500; text-transform: uppercase; }
+
+        /* THE MOBILE FIX IS HERE */
+        @media (max-width: 600px) {
+            #intro-overlay {
+                background-size: 100% 100%;
+            }
+            .intro-title { font-size: 3rem; } 
+            .home-names { font-size: 2.8rem; } 
+            .section-title { font-size: 1.8rem; }
+            .top-nav { padding: 12px 15px; gap: 15px; width: 95%; }
+            .nav-link { font-size: 0.7rem; }
+            .section-card { padding: 40px 20px; margin: 10px 0; }
+            .home-date .date-row { gap: 5px; }
+            .home-date .date-side { padding: 6px 8px; font-size: 0.6rem; }
+            .home-date .date-center { padding: 8px 15px; }
+            .home-date .date-number { font-size: 2rem; }
+            .global-frame { top: 8px; left: 8px; right: 8px; bottom: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="global-frame"></div>
+
+    <div class="bg-pattern"></div>
+
+    <div id="intro-overlay">
+        <div class="intro-content" id="intro-content">
+            <h1 class="intro-title">Emil & Sarah</h1>
+            <p style="font-family: 'Montserrat', sans-serif; letter-spacing: 4px; font-size: 0.8rem; text-transform: uppercase; color: var(--sage-main);">Are getting married</p>
+            <p style="margin-top: 8px; font-family: 'Montserrat', sans-serif; letter-spacing: 4px; font-size: 0.75rem; text-transform: uppercase; color: var(--sage-main);">06-18-2026</p>
+            
+            <div class="intro-seal" onclick="breakSeal()">
+                E&S
+            </div>
+            
+            <p style="margin-top: 30px; font-size: 0.75rem; letter-spacing: 3px; color: var(--sage-dark);">TAP SEAL TO OPEN</p>
+        </div>
+    </div>
+
+    <nav class="top-nav" id="top-nav">
+        <a href="#" class="nav-link active" onclick="navTo('home', event)">Home</a>
+        <a href="#" class="nav-link" onclick="navTo('details', event)">Details</a>
+        <a href="#" class="nav-link" onclick="navTo('rsvp', event)">RSVP</a>
+    </nav>
+
+    <div class="main-container" id="main-container">
+
+        <section id="card-home" class="section-card active">
+            <p class="home-eyebrow">Together with their families</p>
+            <div class="home-names">Emil &amp; Sarah</div>
+            <p class="home-invite">Invite you to the ceremony and celebration<br>of their marriage</p>
+
+            <div class="home-date">
+                <div class="date-month">June</div>
+                <div class="date-row">
+                    <div class="date-side">Thursday</div>
+                    <div class="date-center">
+                        <div class="date-number">18</div>
+                    </div>
+                    <div class="date-side">At 2:00 PM</div>
+                </div>
+            </div>
+
+            <p class="home-venue">Immaculate Conception Parish<br>Zone 5 Bulan, Sorsogon</p>
+            <div class="home-reception">Reception to follow</div>
+        </section>
+
+        <section id="card-details" class="section-card">
+            <h2 class="section-title">The Details</h2>
+            
+            <div style="margin: 30px 0; text-align: center;">
+                <p class="text-body" style="border-bottom: 1px solid #f0f0f0; padding-bottom: 25px;">
+                    <strong style="color: var(--sage-dark); font-size: 1.1rem; font-family: 'Playfair Display', serif;">Ceremony</strong><br>
+                    Begins promptly at 4:00 PM in the botanical courtyard.
+                </p>
+                <p class="text-body" style="border-bottom: 1px solid #f0f0f0; padding-bottom: 25px; margin-top: 25px;">
+                    <strong style="color: var(--sage-dark); font-size: 1.1rem; font-family: 'Playfair Display', serif;">Reception</strong><br>
+                    Cocktails, elegant dinner, and dancing to follow in the main glasshouse.
+                </p>
+                <p class="text-body" style="margin-top: 25px;">
+                    <strong style="color: var(--sage-dark); font-size: 1.1rem; font-family: 'Playfair Display', serif;">Attire</strong><br>
+                    Formal Garden Attire.<br><span style="font-size: 0.85rem; color: #777;">*We suggest avoiding stilettos due to the natural lawn.</span>
+                </p>
+            </div>
+        </section>
+
+        <section id="card-rsvp" class="section-card">
+            <h2 class="section-title">Kindly Reply</h2>
+            <p class="text-body" style="font-size: 0.9rem; margin-bottom: 35px; color: #777;">Please respond by May 1st, 2024.</p>
+            
+            <form class="rsvp-form" onSubmit="event.preventDefault(); this.innerHTML = '<div style=\'text-align:center; padding: 40px 0;\'><h3 style=\'font-family:Playfair Display; font-size: 1.8rem; color: var(--sage-main);\'>Thank you!</h3><p style=\'margin-top: 15px; color: #666;\'>Your response has been received.</p></div>';">
+                <div class="input-group">
+                    <label>Guest Name(s)</label>
+                    <input type="text" required placeholder="E.g., Jane & John Doe">
+                </div>
+                <div class="input-group">
+                    <label>Will you attend?</label>
+                    <select required>
+                        <option value="">Select an option</option>
+                        <option value="yes">Joyfully Accept</option>
+                        <option value="no">Regretfully Decline</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Dietary Restrictions</label>
+                    <input type="text" placeholder="(Optional) E.g., Vegetarian, Nut allergy">
+                </div>
+                <button type="submit" class="action-btn" style="margin-top: 15px;">Send RSVP</button>
+            </form>
+        </section>
+
+    </div>
+
+    <script>
+        // Completely new Opening Concept - The "Wax Seal" / Unveiling
+        function breakSeal() {
+            const overlay = document.getElementById('intro-overlay');
+            const content = document.getElementById('intro-content');
+            const nav = document.getElementById('top-nav');
+            const mainContainer = document.getElementById('main-container');
+
+            // Zoom and fade the intro content
+            content.style.transform = 'scale(1.2)';
+            content.style.opacity = '0';
+
+            setTimeout(() => {
+                // Fade out the frosted overlay entirely
+                overlay.style.opacity = '0';
+                overlay.style.visibility = 'hidden'; 
+                
+                // Expose main sections
+                mainContainer.style.display = 'flex';
+                
+                // Allow CSS transitions to happen gracefully
+                setTimeout(() => {
+                    mainContainer.style.opacity = '1';
+                    nav.style.opacity = '1';
+                    nav.style.transform = 'translateY(0)';
+                }, 50);
+
+            }, 500); 
+        }
+
+        // Distinct Navigation handler
+        function navTo(sectionId, event) {
+            if(event) event.preventDefault();
+            
+            // Hide all cards
+            document.querySelectorAll('.section-card').forEach(el => el.classList.remove('active'));
+            // Remove active states from nav
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            
+            // Show target card
+            document.getElementById('card-' + sectionId).classList.add('active');
+            
+            // Highlight nav link
+            if(event) {
+                event.target.classList.add('active');
+            } else {
+                document.querySelector(`.nav-link[onclick*="${sectionId}"]`).classList.add('active');
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
